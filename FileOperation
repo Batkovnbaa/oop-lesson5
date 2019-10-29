@@ -1,0 +1,83 @@
+package batkovna;
+
+import java.io.*;
+
+public class FileOperation {
+	
+	public static void copyFile(File in, File out) throws IOException {
+		byte[] buffer = new byte[1024*1024*8];
+		int byteRead = 0;
+		try (FileInputStream fis = new FileInputStream(in); FileOutputStream fos = new FileOutputStream(out)) {
+			for (; (byteRead = fis.read(buffer)) > 0;) {
+				fos.write(buffer, 0, byteRead);
+			}
+		} catch (IOException e) {
+			throw e;
+		}
+	}
+	
+	public static void list(File f) {
+		File[] fileArray = f.listFiles();
+		int fileCount = 0;
+		int folderCount = 0;
+		for (File fileOne: fileArray) {
+			long fileSize = fileOne.length();
+			if (fileOne.isFile()) {
+				fileCount ++;
+			} else {
+				folderCount ++;
+			}
+			String type = (fileOne.isFile()) ? "File" : "Folder";
+			System.out.println(fileOne.getName() + "\t" + type  + "\t" + fileSize);
+		}
+		 System.out.println("Total " + fileCount + "files.");
+		 System.out.println("Total " + folderCount + "folder.");
+	}
+	
+	public static String FileToString(File f) {
+		String strOne = "";
+		try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+			String strTwo = "";
+			for (; (strTwo = br.readLine()) != null;) {
+				if (strOne != "") {
+					strOne = strOne + " " + strTwo;
+				}	else { 
+					strOne = strOne + strTwo;
+			}
+			}
+		}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			return strOne;
+		}
+		
+	public static String twoToOneStringArrays(String[] arrayOne, String[] arrayTwo) {
+		String resStr = "";
+		for (int i = 0; i < arrayTwo.length; i++) {
+			for (int j = 0; j < arrayTwo.length; j++) {
+				if (arrayOne[i].equals(arrayTwo[j])) {
+					if (resStr != "") {
+						resStr = resStr + " " + arrayOne[i];
+					} else {
+						resStr = resStr + arrayOne[i];
+					}
+				}
+			}
+			
+		}
+		return resStr;
+	}
+
+	
+	public static void twoFilesToOne(File fileOne, File fileTwo) {
+		String[] arrayOne = FileToString(fileOne).split(" ");
+		String[] arrayTwo = FileToString(fileTwo).split(" ");
+		
+		try (PrintWriter pw = new PrintWriter("result.txt")) {
+			pw.println(twoToOneStringArrays(arrayOne, arrayTwo));
+		} catch (FileNotFoundException e){
+			e.printStackTrace();
+		}
+	}
+}
