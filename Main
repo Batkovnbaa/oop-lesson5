@@ -1,0 +1,27 @@
+package batkovna;
+
+import java.io.*;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		try (PrintWriter pw = new PrintWriter("testOne.txt")) {
+			pw.println("First TEST.");
+			pw.println("Second TEST.");
+		} catch (FileNotFoundException e){
+			System.out.println("ERROR!!!");
+		}
+		
+		try (PrintWriter pw = new PrintWriter("testTwo.txt")) {
+			pw.println("test text for First TEST.");
+			pw.println("test text for Second TEST.");
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR!!!");
+		}
+		
+		File testOne = new File("testOne.txt");
+		File testTwo = new File("testTwo.txt");
+	}
+
+}
